@@ -1,0 +1,40 @@
+﻿@using Nancy.Helpers
+@using QuartzNet.WebConsole.VewModels.QuartzConsole
+@{
+    Layout = "Shared/_layout.cshtml";
+    ViewBag.title = "Job statuses";
+}
+<table class="table table-bordered">
+    <caption>Quartz - @Model.Machine Job statuses</caption>
+    <thead>
+        <tr>
+            <th>Job key</th>
+            <th>Last run</th>
+            <th>Next run</th>
+            <th>IsRunning</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (JobGroupViewModel g in Model.Groups)
+        {
+            @foreach (var i in g.JobDetails)
+            {
+                <tr>
+                    <td>@i.JobKey</td>
+                    <td>@i.LastRun</td>
+                    <td>@i.NextScheduledRun</td>
+                    <td>@i.IsRunning</td>
+                    <td>
+                        <form method="POST" class="form-inline"
+                              action="@Url.Content(string.Format("~/quartzconsole/trigger/{0}/{1}/", HttpUtility.UrlEncode(i.SchedulerName), HttpUtility.UrlEncode(i.JobKey.ToString())))">
+                            <input type="submit" class="btn" value="Trigger"/>
+                        </form>
+                    </td>
+                </tr>
+                
+            }
+        }
+
+    </tbody>
+</table>

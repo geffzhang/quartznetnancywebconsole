@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>QuartzNet.WebConsole</id>
+        <version>1.0.1.2</version>
+        <title>QuartzNet.WebConsole</title>
+        <authors>Valera Kolupaev</authors>
+        <owners>Valera Kolupaev</owners>
+        <projectUrl>http://quartznetwebconsole.codeplex.com/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Web console for Quartz.Net</description>
+        <copyright>Copyright 2013</copyright>
+        <tags>QuartzNet Quartz.Net Quartz</tags>
+        <releaseNotes>
+          v1.0.1.1
+          * Added support for timezones
+          * Added screen with schedule view
+          * Bugfix with timezone selection
+          v1.0.1.2
+          * 12/24h DateTime parsing vix
+          * Feature to ignore some tasks in schedule view
+        </releaseNotes>
+        <dependencies>
+            <dependency id="Common.Logging" version="2.1.2" />
+            <dependency id="Nancy" version="0.16.1" />
+            <dependency id="Nancy.Authentication.Forms" version="0.16.1" />
+            <dependency id="Nancy.Hosting.Self" version="0.16.1" />
+            <dependency id="Nancy.Viewengines.Razor" version="0.16.1" />
+            <dependency id="Quartz" version="2.1.2" />
+            <dependency id="System.Web.Razor.Unofficial" version="2.0.1" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="QuartzNet.WebConsole\bin\Release\QuartzNet.WebConsole.dll" target="lib\net40\QuartzNet.WebConsole.dll" />
+        <file src="QuartzNet.WebConsole\bin\Release\QuartzNet.WebConsole.pdb" target="lib\net40\QuartzNet.WebConsole.pdb" />
+        <file src="readme.txt" />
+        <file src="QuartzNet.WebConsole\**\*.cs" target="src" />
+    </files>
+</package>

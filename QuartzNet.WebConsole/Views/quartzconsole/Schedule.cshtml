@@ -1,0 +1,101 @@
+﻿@using QuartzNet.WebConsole.VewModels.QuartzConsole
+
+@{
+    Layout = "Shared/_layout.cshtml";
+    ViewBag.title = "Job schedule";
+}
+@section head
+{
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.10.1.custom.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/fullcalendar.min.js")"> </script>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/fullcalendar.css")">
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            function getActivenJobs() {
+                var activeButtons = $(".job-selection:checked");
+                var btn = [];
+                for (var i = 0; i < activeButtons.length; i++) {
+                    btn.push($(activeButtons[i]).attr("data-key"));
+                }
+                return btn;
+            }
+
+            var eventSoruce = {
+                url: '@Url.Content("~/quartzconsole/ScheduleJson")',
+                type: 'POST',
+                data: {
+                    activeJobs: getActivenJobs()
+                },
+                error: function () {
+                    alert('there was an error while fetching events!');
+                }
+            };
+            var calendar = $('#calendar');
+            calendar.fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay'
+                },
+                defaultView: 'basicDay',
+                editable: false,
+                loading: function (bool) {
+                    if (bool) $('#loading').show();
+                    else $('#loading').hide();
+                },
+                eventSources: [eventSoruce]
+            });
+            $(".job-selection").on("change", function () {
+                eventSoruce.data.activeJobs = getActivenJobs();
+                calendar.fullCalendar('refetchEvents');
+            });
+            $(".job-selection").button();
+            $("#job-selection-all").click(function() {
+                $(".job-selection[data-ignored=false]").prop("checked", "checked");
+                eventSoruce.data.activeJobs = getActivenJobs();
+                calendar.fullCalendar('refetchEvents');
+            });
+            $("#job-selection-none").click(function () {
+                $(".job-selection").prop("checked", false);
+                eventSoruce.data.activeJobs = getActivenJobs();
+                calendar.fullCalendar('refetchEvents');
+            });
+
+        });
+
+    </script>
+    <style type='text/css'>
+        #loading
+        {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
+
+}
+<div class="row">
+    <div id='loading' style='display: none'>loading...</div>
+    <div class="jobs span2">
+        <h3>Jobs</h3>
+        <a href="#" id="job-selection-all">All</a>
+        <a href="#" id="job-selection-none">None</a>
+        @foreach (string jobKey in Model.jobs)
+        {
+            <label class="checkbox">
+                @if (Model.ignoredSchedules.Contains(@jobKey))
+                {
+                    <input type="checkbox" class="job-selection" name="job-selection" data-ignored="true" data-key="@jobKey" value="@jobKey"/>@jobKey
+                }
+                else
+                {
+                    <input type="checkbox" class="job-selection" name="job-selection" data-ignored="false" checked="checked" data-key="@jobKey" value="@jobKey"/>@jobKey
+                }
+            </label>
+        }
+    </div>
+    <div id="calendar" class="span7">
+    </div>
+</div>
+    

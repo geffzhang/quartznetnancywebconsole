@@ -1,0 +1,53 @@
+﻿@using System
+@using QuartzNet.WebConsole.VewModels.QuartzConsole
+@using QuartzNet.WebConsole.Views
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quartz - @ViewBag.machineName @ViewBag.title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"> </script>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/bootstrap.css")">
+    @RenderSection("head", false)
+    <script type="text/javascript">
+        $(function () {
+            $("#time-zones").change(function () {
+                $("#time-zones").parent("form").submit();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span2">
+                <ul class="nav nav-pills">
+
+                    <li class="@Url.IsActive("~/quartzconsole/index", "active")"><a href="@Url.Content("~/quartzconsole/index")">Jobs</a></li>
+                    <li class="@Url.IsActive("~/quartzconsole/schedule", "active")"><a href="@Url.Content("~/quartzconsole/schedule")">Schedule</a></li>
+                </ul>
+            </div>
+            <div class="span4 offset6">
+                <form class="form-inline" action="@Url.Content("~/quartzconsole/setTimezone")" method="POST">
+                    <label for="time-zones">Timezone:</label>
+                    <select id="time-zones" name="timezone">
+                        @foreach (Tuple<string, string> zone in (Tuple<string, string>[])ViewBag.timezones.Value)
+                        {
+                            if (zone.Item1 == ViewBag.selectedZone.Value)
+                            {
+                            <option value="@zone.Item1" selected="selected">@zone.Item2</option>
+                            }
+                            else
+                            {
+                            <option value="@zone.Item1">@zone.Item2</option>
+                            }
+                        }
+                    </select>
+                </form>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+</body>
+</html>
